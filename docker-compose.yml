@@ -3,10 +3,15 @@ services:
     build: ./services/api-service
     depends_on:
       - redis
+      - inventory
+      - kafka
+      - consul
     environment:
       - REDIS_HOST=redis
+      - CONSUL_HOST=consul
     ports:
       - "8200:8000"
+      
   
   traefik:
     image: traefik:v2.9
@@ -32,6 +37,8 @@ services:
     container_name: inventory-service
     ports:
       - "50051:50051"
+    environment:
+      - CONSUL_HOST=consul
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -50,3 +57,13 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  
+  consul:
+    image: hashicorp/consul:1.17
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    volumes:
+      - ./discovery/consul/server.json:/consul/config/server.json
+    command: "agent -dev -config-dir=/consul/config"
