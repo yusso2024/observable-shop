@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package inventory;
+
+service InventoryService {
+  rpc GetItems (Empty) returns (ItemList);
+}
+
+message Empty {}
+
+message ItemList {
+  repeated string items = 1;
+}
