@@ -4,3 +4,4 @@ redis
 grpcio
 grpcio-tools
 protobuf
+kafka-python-ng
