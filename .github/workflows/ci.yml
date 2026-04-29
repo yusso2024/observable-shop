@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api-service, inventory-service]
+        service: [api-service, inventory-service, order-service]
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image

@@ -207,7 +207,7 @@ def create_order(order: dict):
     return {"status": "queued", "order": order}
 ```
 
-## Step 7 — Test the Flow
+## **Step 7 — Test the Flow
 
 Start everything:
 
@@ -243,6 +243,19 @@ Código
 
 ```
 Processing order: {'item': 'apple', 'qty': 3}
+```
+
+## Step 8 — Add to ci.yml matrix, the order-service
+```yaml
+build-services:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+
+      matrix:
+
+        service: [api-service, inventory-service, order-service]
 ```
 
 # 🧠 **Reflection Questions**
