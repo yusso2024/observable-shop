@@ -1,0 +1,21 @@
+http:
+  middlewares:
+    ratelimit:
+      rateLimit:
+        average: 5
+        burst: 10
+
+  routers:
+    api:
+      rule: "PathPrefix(`/`)"
+      entryPoints:
+        - web
+      service: api-service
+      middlewares:
+        - ratelimit
+
+  services:
+    api-service:
+      loadBalancer:
+        servers:
+          - url: "http://api-service:8000"

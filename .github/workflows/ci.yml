@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  compose-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate docker-compose
+        run: docker compose -f docker-compose.yml config --quiet
+
+  build-services:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [api-service]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: |
+          if [ -f services/${{ matrix.service }}/Dockerfile ]; then
+            docker build -t observable-shop-${{ matrix.service }}:${{ github.sha }} services/${{ matrix.service }}
+          else
+            echo "No Dockerfile for ${{ matrix.service }} yet, skipping"
+          fi
